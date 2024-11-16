@@ -1,0 +1,8 @@
+# Ignore the following folders
+/docker_volumes/mongodb/*
+/docker_volumes/mysql/*
+
+# Ignore python generated garbage
+__pycache__
+**/__pycache__
+**/**/__pycache__
