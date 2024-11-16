@@ -15,7 +15,7 @@ docker-compose up -d
 docker-compose down
 ```
 
-WARNING REGARDING DOCKER: delete docker_volumes folder whenever you change the definitions in the env folder
+WARNING REGARDING DOCKER: delete docker_volumes folder whenever you change the definitions in the env file
 
 ##### Included Configuration File
 The included .env file contains values which map the necessary parameters to build a proper connection string within the python script. Be sure to check this file before attempting to execute this application!
