@@ -13,8 +13,8 @@ def bookCollectionInit(database):
         'required': ['ISBN', 'Book-Title','Book-Author'],
         'properties': {
             'ISBN': {
-                'bsonType': 'int',
-                'description': 'must be a int and is required'
+                'bsonType': 'string',
+                'description': 'must be a string and is required'
             },
             'Book-Title': {
                 'bsonType': 'string',

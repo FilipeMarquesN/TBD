@@ -31,7 +31,7 @@ pipeline = [
         }
     },
     {
-        '$sort': {'average_discount': 1}  # Sort by average discount in ascending order
+        '$sort': {'average_age': 1}  # Sort by average age in ascending order
     }
 ]
 result = list(db.users.aggregate(pipeline))
@@ -54,7 +54,7 @@ pipeline = [
         }
     },
     {
-        '$sort': {'average_Year_of_Publication': 1}  # Sort by average discount in ascending order
+        '$sort': {'average_Year_of_Publication': 1}  # Sort by average year in ascending order
     }
 ]
 result = list(db.books.aggregate(pipeline))
