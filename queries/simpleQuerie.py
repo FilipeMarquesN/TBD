@@ -39,19 +39,24 @@ result = list(db.users.aggregate(pipeline))
 
 
 ##Exemplos
+#Users from usa with age <=18
 
-query_Users({"Location": {"$regex": "^usa"},  "Age": {"$gt": 20}},toPrintOutput = True)
+query_Users({"Location": {"$regex": "usa"},  "Age": {"$lte": 18}},toPrintOutput = True)
 
+
+#Book number grouped by year and publisher
 pipeline = [
     {
         '$group': {
             '_id': '$Publisher',  
             'average_Year_of_Publication': {'$avg': '$Year-Of-Publication'},  
-            'User_count': {'$sum': 1}  
+            'Book_count': {'$sum': 1}  
         }
     },
     {
-        '$sort': {'average_discount': 1}  # Sort by average discount in ascending order
+        '$sort': {'average_Year_of_Publication': 1}  # Sort by average discount in ascending order
     }
 ]
 result = list(db.books.aggregate(pipeline))
+
+
