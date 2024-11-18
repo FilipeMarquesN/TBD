@@ -1,7 +1,8 @@
 import pandas as pd
 from pathlib import Path as path_of, PurePath as concat_path
 """
-Returns a dict of Pandas Dataframes containing the Datasets
+Returns a list of tuples containing the name of the collection
+and the respective dataframe
 
 Parameters:
 - environment: dict containing environment variables
@@ -9,7 +10,7 @@ Parameters:
 def to_frames(environment):
     work_dir = environment["__WORK_DIR__"]
     data_dir = path_of(concat_path(path_of(work_dir),path_of("dataset")))
-    return [pd.read_csv(str(f)) \
+    return [(f.name[:-4],pd.read_csv(str(f))) \
          for f in data_dir.iterdir() if f.name[-4:] == ".csv"]
 
 """

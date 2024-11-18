@@ -1,0 +1,40 @@
+{
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["ISBN", "Book-Title","Book-Author"],
+        "properties": {
+            "ISBN": {
+                "bsonType": "int",
+                "description": "must be a int and is required"
+            },
+            "Book-Title": {
+                "bsonType": "string",
+                "description": "must be a valid title and is required"
+            },
+            "Book-Author": {
+                "bsonType": "string",
+                "description": "must be a stringif provided"
+            },
+            "Year-Of-Publication": {
+                "bsonType": "int",
+                "description": "must be an int if provided"
+            },
+            "Publisher": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Image-URL-S": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Image-URL-M": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Image-URL-L": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            }
+        }
+    }
+}
