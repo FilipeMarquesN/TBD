@@ -32,7 +32,7 @@ def to_cleaned_frames(environment):
                                 "Image-URL-L":"ImageLarge"},inplace=True)
             new_frames.append((name,frame))
         if name == "Users":
-            frame.rename(columns={"User-ID":"User"},inplace=True)
+            frame.rename(columns={"User-ID":"ID","Location":"Locale"},inplace=True)
             new_frames.append((name,frame))
         if name == "Ratings": #only column in our data with invalid data (non existing ISBNs)
             frame.rename(columns={"User-ID":"User","Book-Rating":"Rating"},inplace=True)
