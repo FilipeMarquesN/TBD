@@ -1,7 +1,8 @@
 import pandas as pd
 from pathlib import Path as path_of, PurePath as concat_path
 """
-Returns a dict of Pandas Dataframes containing the Datasets
+Returns a list of tuples containing the name of the collection
+and the respective dataframe
 
 Parameters:
 - environment: dict containing environment variables
@@ -9,7 +10,7 @@ Parameters:
 def to_frames(environment):
     work_dir = environment["__WORK_DIR__"]
     data_dir = path_of(concat_path(path_of(work_dir),path_of("dataset")))
-    return [pd.read_csv(str(f)) \
+    return [(f.name[:-4],pd.read_csv(str(f))) \
          for f in data_dir.iterdir() if f.name[-4:] == ".csv"]
 
 """
@@ -20,5 +21,24 @@ Parameters:
 """
 def to_cleaned_frames(environment):
     frames = to_frames(environment)
-    raise NotImplementedError
-    # Implement methods on to clean dirty rows (ie, invalid cells, etc). Replace with something that's acceptable
+    new_frames = []
+    for name, frame in frames:
+        if name == "Books":
+            frame.rename(columns={"Book-Title":"Title",
+                                "Book-Author":"Author",
+                                "Year-Of-Publication":"YearOfPublication",
+                                "Image-URL-S":"ImageSmall",
+                                "Image-URL-M":"ImageMedium",
+                                "Image-URL-L":"ImageLarge"},inplace=True)
+            new_frames.append((name,frame))
+        if name == "Users":
+            frame.rename(columns={"User-ID":"User"},inplace=True)
+            new_frames.append((name,frame))
+        if name == "Ratings": #only column in our data with invalid data (non existing ISBNs)
+            frame.rename(columns={"User-ID":"User","Book-Rating":"Rating"},inplace=True)
+            ISBN = r'^(?![0-9X]{9,10}$).*'
+            filter = frame["ISBN"].str.match(ISBN, na=False)
+            f = frame[~filter]
+            new_frames.append((name,f))
+
+    return frames

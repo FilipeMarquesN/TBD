@@ -20,7 +20,10 @@ def load_env(path_of_script):
                 l = line.strip().split("=")
                 if len(l) == 2 :
                     key, value = l
-                    ret[key] = value
+                    if "PATH" in key[:4] :
+                        ret[key] = str(concat_path(work_dir,path_of(value)))
+                    else :
+                        ret[key] = value
             return ret
     except FileNotFoundError:
         print(f"Error: Environment file doesn't exist.")
