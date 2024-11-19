@@ -2,14 +2,14 @@
 Modules responsible for loading the database
 parameters and establishing the connection
 '''
-from drivers.mongo import get_client
-from drivers.mysql import get_engine
+from .drivers.mongo import get_client
+from .drivers.mysql import get_engine
 '''
 Modules responsible for loading the schemas
 for the databases
 '''
-from initializers.mongo import init_collections
-from initializers.mysql import init_tables
+from .initializers.mongo import init_collections
+from .initializers.mysql import init_tables
 '''
 Utilities for this class
 '''
@@ -31,7 +31,16 @@ class DatabaseWrapper():
     - dataset: list of pairs (name, dataframe) as returned
     by dataset.to_frames
     '''
-    def insert(self, dataset):
+    def insert_dataframe(name, dataset):
+        return self.ops["insert_dataset"](dataset)
+
+    
+    '''
+    Parameters:
+    - query_file: file path to a json or sql file that contains
+    valid queries
+    '''
+    def insert(self, query_file):
         return self.ops["insert"](dataset)
 
     '''
@@ -49,8 +58,8 @@ class DatabaseWrapper():
     - Parameters:
     ?
     '''
-    def update(self):
-        raise NotImplementedError
+    def update(self,query_file):
+        return self.ops["update"](query_file)
 
 
 
@@ -59,10 +68,27 @@ def getMongoWrapper(environment):
     client = get_client(environment)
     init_collections(client,environment["PATH_SCHEMA_MONGO"])
 
-    def insert(dataset):
+    def insert_data(dataset):
         for collection, dataframe in dataset:
             client[collection]. \
             insert_many(dataframe.to_dict(orient="records"), ordered=False)
+
+    def insert(query_file):
+        with open(query_file, "r") as query_json:
+            query = load(query_json)
+            
+            if(type(query["query"]) == list):
+                start = time()
+                client[query["collection"]].insert_many(query["query"])
+                end = time() - start
+                return (result, end)
+
+            elif(type(query["query"]) == dict):
+                start = time()
+                client[query["collection"]].insert_one(query["query"])
+                end = time() - start
+                return (result, end)
+
 
     def query(query_file):
         with open(query_file, "r") as query_json:
@@ -80,19 +106,37 @@ def getMongoWrapper(environment):
                 end = time() - start
                 return (result, end)
                 
+    def update(query_file):
+        with open(query_file, "r") as query_json:
+            query = load(query_json)
+
+            if(type(query["query"]) == list):
+                start = time()
+                client[query["collection"]].update_many(query["query"])
+                end = time() - start
+                return (result, end)
+
+            elif(type(query["query"]) == dict):
+                start = time()
+                client[query["collection"]].update_one(query["query"])
+                end = time() - start
+                return (result, end)
+            
     return DatabaseWrapper(
         {
-            "insert": insert ,
-            "query": query
+            "insert_data": insert_data ,
+            "insert": insert,
+            "query": query,
+            "update": update
         }
     )
 
 
-def getMySQLWrapper(environemnt):
+def getMySQLWrapper(environment):
     engine = get_engine(environment)
     init_tables(engine,environment["PATH_SCHEMA_MYSQL"])
 
-    def insert(dataset):
+    def insert_data(dataset):
         for collection, dataframe in dataset:
             dataframe.to_sql(collection, con=engine, if_exists='replace', index=False, method='multi')
             # ISSUE: Hes gonna complain about the file order fix this later
@@ -107,11 +151,12 @@ def getMySQLWrapper(environemnt):
     
     return DatabaseWrapper(
         {
-            "insert": insert,
-            "query": query
+            "insert_data": insert_data,
+            "insert": query,
+            "query": query, # through sql alchemy, these methods should functionally do the same
+            "update": query
         }
     )
-
 
 '''
 Returns 2 database Wrappers

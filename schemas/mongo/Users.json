@@ -8,7 +8,7 @@
                 "description": "must be a int and is required"
             },
              "Location": {
-                "bsonType": "String",
+                "bsonType": "string",
                 "description": "must be a string if provided"
             },
             "Age": {
