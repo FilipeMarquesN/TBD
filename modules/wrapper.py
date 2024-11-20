@@ -178,20 +178,23 @@ def getMySQLWrapper(environment):
         ratings, rframe = dataset[1]
         with engine.connect() as conn:
             for index, row in bframe.iterrows():
-                conn.execute("INSERT INTO Books VALUES(:ISBN,:Title,:Author,:YearOfPublication,:Publisher,:ImageSmall,:ImageMedium,:ImageLarge)",
-                ISBN = row["ISBN"], Title = row["Title"], Author = row["Author"], YearOfPublication = row["YearOfPublication"],
-                Publisher = row["Publisher"], ImageSmall = row["ImageSmall"], ImageMedium = row["ImageMedium"], ImageLarge = row["ImageLarge"])
+                try:
+                    conn.execute(text("INSERT INTO Books VALUES(:ISBN,:Title,:Author,:YearOfPublication,:Publisher,:ImageSmall,:ImageMedium,:ImageLarge)"),
+                    row.to_dict())
+                except Exception as e:
+                    print(e)
 
             for index, row in uframe.iterrows():
-                conn.execute("INSERT INTO Users VALUES(:ID,:Locale,:Age)", ID = row["ID"], Locale = row["Locale"], Age = row["Age"])
+                try:
+                    conn.execute(text("INSERT INTO Users VALUES(:ID,:Locale,:Age)"), row.to_dict())
+                except Exception as e:
+                    print(e)
 
             for index, row in rframe.iterrows():
-                conn.execute("INSERT INTO Ratings VALUES(:User, :ISBN, :Rating)", User = row["User"], ISBN = row["ISBN"], Rating = row["Rating"])
-        
-        #for collection, dataframe in dataset:
-            #print(f"Inserting collection {collection}")
-            #dataframe.to_sql(collection, con=engine, if_exists='replace', index=False, method='multi')
-            # ISSUE: Hes gonna complain about the file order fix this later
+                try:
+                    conn.execute(text("INSERT INTO Ratings VALUES(:User, :ISBN, :Rating)"), row.to_dict())
+                except Exception as e:
+                    print(e)
 
     def query(query_file):
         with open(query_file, "r") as query_sql:

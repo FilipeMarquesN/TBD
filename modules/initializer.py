@@ -10,11 +10,16 @@ def get_initialized_wrapper(environment):
     if not Mongo.is_init() or not Mysql.is_init() : #If the databases aren't initialized with data
         print("Databases aren't initialized with any data. Inserting datasets")
         dataframes = to_cleaned_frames(environment) # Fetch the data from the datasets
-
-        Mongo.insert_dataframe(dataframes) # Initialize Mongo with data
-        print("MongoDB initialized with data")
-        Mysql.insert_dataframe(dataframes) # Initialize Mysql with data
-        print("MySQL initialized with data")    
+        if Mongo.is_init():
+            print("Mongo was already initialized")
+        else:
+            Mongo.insert_dataframe(dataframes) # Initialize Mongo with data
+            print("MongoDB initialized with data")
+        if Mysql.is_init():
+            print("Mysql was already initialized")
+        else:
+            Mysql.insert_dataframe(dataframes) # Initialize Mysql with data
+            print("MySQL initialized with data")    
     else :
         print("Databases are already loaded with data")
 
