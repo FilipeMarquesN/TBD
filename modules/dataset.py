@@ -21,7 +21,6 @@ Parameters:
 """
 def to_cleaned_frames(environment):
     frames = to_frames(environment)
-    new_frames = []
     for name, frame in frames:
         if name == "Books":
             frame.rename(columns={"Book-Title":"Title",
@@ -30,15 +29,9 @@ def to_cleaned_frames(environment):
                                 "Image-URL-S":"ImageSmall",
                                 "Image-URL-M":"ImageMedium",
                                 "Image-URL-L":"ImageLarge"},inplace=True)
-            new_frames.append((name,frame))
         if name == "Users":
             frame.rename(columns={"User-ID":"ID","Location":"Locale"},inplace=True)
-            new_frames.append((name,frame))
         if name == "Ratings": #only column in our data with invalid data (non existing ISBNs)
             frame.rename(columns={"User-ID":"User","Book-Rating":"Rating"},inplace=True)
-            ISBN = r'^(?![0-9X]{9,10}$).*'
-            filter = frame["ISBN"].str.match(ISBN, na=False)
-            f = frame[~filter]
-            new_frames.append((name,f))
 
     return frames

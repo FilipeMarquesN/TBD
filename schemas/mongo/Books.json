@@ -5,8 +5,7 @@
         "properties": {
             "ISBN": {
                 "bsonType": "string",
-                "description": "must be a int and is required",
-                "pattern": "^[0-9X]{9,10}$"
+                "description": "must be a int and is required"
             },
             "Title": {
                 "bsonType": "string",

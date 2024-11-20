@@ -9,8 +9,7 @@
             },
              "ISBN": {
                 "bsonType": "string",
-                "description": "must be a int and is required",
-                "pattern": "^[0-9X]{9,13}$"
+                "description": "must be a int and is required"
             },
             "Rating": {
                 "bsonType": "int",

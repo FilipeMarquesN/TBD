@@ -82,11 +82,20 @@ def getMongoWrapper(environment):
     def insert_data(dataset):
         for collection, dataframe in dataset:
             print(f"Inserting collection {collection}")
+            print("Inserting in batches of 500 records (avoid Mongo 16MB limitation)")
+            to_send = []
             for index, row in dataframe.iterrows():
-                try:
-                    client[collection].insert_one(row.to_dict())
-                except Exception as e:
-                    print(f"Couldn't insert record no#{index}:{row}\nReason: {e}")
+                if index+1 % 500 != 0 :
+                    to_send.append(row.to_dict())
+                else:
+                    #try:
+                        client[collection].insert_many(documents=to_send, ordered=False).inserted_ids()
+                        to_send = []
+                    #except Exception as e:
+                    #    print(f"Couldn't insert batch no#{int(index%500)}:\nReason: {e}")
+
+
+                
             #client[collection]. \
             #insert_many(dataframe.to_dict(orient="records"), ordered=False).inserted_ids()
 
@@ -164,9 +173,24 @@ def getMySQLWrapper(environment):
                 return False
 
     def insert_data(dataset):
-        for collection, dataframe in dataset:
-            print(f"Inserting collection {collection}")
-            dataframe.to_sql(collection, con=engine, if_exists='replace', index=False, method='multi')
+        books, bframe = dataset[0]
+        users, uframe = dataset[2]
+        ratings, rframe = dataset[1]
+        with engine.connect() as conn:
+            for index, row in bframe.iterrows():
+                conn.execute("INSERT INTO Books VALUES(:ISBN,:Title,:Author,:YearOfPublication,:Publisher,:ImageSmall,:ImageMedium,:ImageLarge)",
+                ISBN = row["ISBN"], Title = row["Title"], Author = row["Author"], YearOfPublication = row["YearOfPublication"],
+                Publisher = row["Publisher"], ImageSmall = row["ImageSmall"], ImageMedium = row["ImageMedium"], ImageLarge = row["ImageLarge"])
+
+            for index, row in uframe.iterrows():
+                conn.execute("INSERT INTO Users VALUES(:ID,:Locale,:Age)", ID = row["ID"], Locale = row["Locale"], Age = row["Age"])
+
+            for index, row in rframe.iterrows():
+                conn.execute("INSERT INTO Ratings VALUES(:User, :ISBN, :Rating)", User = row["User"], ISBN = row["ISBN"], Rating = row["Rating"])
+        
+        #for collection, dataframe in dataset:
+            #print(f"Inserting collection {collection}")
+            #dataframe.to_sql(collection, con=engine, if_exists='replace', index=False, method='multi')
             # ISSUE: Hes gonna complain about the file order fix this later
 
     def query(query_file):
