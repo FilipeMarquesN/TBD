@@ -2,14 +2,14 @@
 Modules responsible for loading the database
 parameters and establishing the connection
 '''
-from .drivers.mongo import get_client
-from .drivers.mysql import get_engine
+from .drivers import get_client
+from .drivers import get_engine
 '''
 Modules responsible for loading the schemas
 for the databases
 '''
-from .initializers.mongo import init_collections
-from .initializers.mysql import init_tables
+from .initializers import init_collections
+from .initializers import init_tables
 '''
 Utilities for this class
 '''
@@ -76,21 +76,22 @@ def getMongoWrapper(environment):
 
     def is_init():
         result = client["Books"].find().to_list()
-        #print(result)
+        print("find books result" + str(result))
         return len(result) != 0
 
     def insert_data(dataset):
-        for collection, dataframe in dataset:
+        for collection in dataset:
             print(f"Inserting collection {collection}")
             print("Inserting in batches of 500 records (avoid Mongo 16MB limitation)")
             to_send = []
-            for index, row in dataframe.iterrows():
+            for index, row in dataset[collection].iterrows():
                 if index+1 % 500 != 0 :
                     to_send.append(row.to_dict())
                 else:
                     #try:
                         client[collection].insert_many(documents=to_send, ordered=False).inserted_ids()
                         to_send = []
+                        print("*",end=" ")
                     #except Exception as e:
                     #    print(f"Couldn't insert batch no#{int(index%500)}:\nReason: {e}")
 
@@ -167,36 +168,59 @@ def getMySQLWrapper(environment):
         with engine.connect() as conn:
             try:
                 result = conn.execute(text("SELECT * FROM Users LIMIT 1;")).fetchall()
-                #print(result)
+                print("Users is empty " + str(result))
                 return len(result) != 0
-            except:
+            except Exception as e:
+                print(e)
                 return False
 
     def insert_data(dataset):
-        books, bframe = dataset[0]
-        users, uframe = dataset[2]
-        ratings, rframe = dataset[1]
+        books = dataset["Books"]
+        users = dataset["Users"]
+        ratings = dataset["Ratings"]
         with engine.connect() as conn:
-            for index, row in bframe.iterrows():
+            for index, row in books.iterrows():
+                if((index + 1)%500 == 0):
+                    print("*",end=" ")
                 try:
                     conn.execute(text("INSERT INTO Books VALUES(:ISBN,:Title,:Author,:YearOfPublication,:Publisher,:ImageSmall,:ImageMedium,:ImageLarge)"),
                     row.to_dict())
                 except Exception as e:
                     print(e)
 
-            for index, row in uframe.iterrows():
+            for index, row in users.iterrows():
+                if((index + 1)%500 == 0):
+                    print("*",end=" ")
                 try:
                     conn.execute(text("INSERT INTO Users VALUES(:ID,:Locale,:Age)"), row.to_dict())
                 except Exception as e:
                     print(e)
 
-            for index, row in rframe.iterrows():
+            for index, row in ratings.iterrows():
+                if((index + 1)%500 == 0):
+                    print("*",end=" ")
                 try:
                     conn.execute(text("INSERT INTO Ratings VALUES(:User, :ISBN, :Rating)"), row.to_dict())
                 except Exception as e:
                     print(e)
 
+    def insert(query_file):
+        with open(query_file, "r") as query_sql:
+            with engine.connect() as conn:   
+                start = time()
+                result = conn.execute(text(query_sql.read()))
+                end = time() - start
+                return (result, end)
+
     def query(query_file):
+        with open(query_file, "r") as query_sql:
+            with engine.connect() as conn:   
+                start = time()
+                result = conn.execute(text(query_sql.read())).fetchall()
+                end = time() - start
+                return (result, end)
+
+    def update(query_file):
         with open(query_file, "r") as query_sql:
             with engine.connect() as conn:   
                 start = time()

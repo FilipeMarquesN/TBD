@@ -4,7 +4,7 @@ from .dataset import to_cleaned_frames
 '''
 Returns Initialized Wrappers
 '''
-def get_initialized_wrapper(environment):
+def get_initialized_wrappers(environment):
     Mongo, Mysql = getWrappers(environment)
 
     if not Mongo.is_init() or not Mysql.is_init() : #If the databases aren't initialized with data

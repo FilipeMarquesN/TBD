@@ -1,2 +1,2 @@
 docker-compose down
-rmdir -r -Force docker_volumes
+rmdir /S /Q "docker_volumes"
