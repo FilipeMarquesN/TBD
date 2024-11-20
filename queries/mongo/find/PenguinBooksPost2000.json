@@ -1,0 +1,7 @@
+{
+    "collection": "Books",
+    "query": {
+        "Publisher": {"$eq": "Penguin Books"},  
+        "Year-Of-Publication": {"$gt": 2000}
+    }
+}

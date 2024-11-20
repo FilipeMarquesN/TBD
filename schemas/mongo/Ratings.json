@@ -1,17 +1,17 @@
 {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["User-ID","ISBN", "Book-Rating"],
+        "required": ["User","ISBN", "Rating"],
         "properties": {
-            "User-ID": {
+            "User": {
                 "bsonType": "int",
                 "description": "must be a int and is required"
             },
              "ISBN": {
-                "bsonType": "int",
+                "bsonType": "string",
                 "description": "must be a int and is required"
             },
-            "Book-Rating": {
+            "Rating": {
                 "bsonType": "int",
                 "minimum": 0,
                 "maximum":10,

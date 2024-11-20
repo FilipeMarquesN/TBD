@@ -1,28 +1,26 @@
 -- Create for table books
-CREATE TABLE books (
-    ISBN varchar(13) NOT NULL,
-    Book-Title varchar(255) NOT NULL ,
-    Book-Author varchar(255) NOT NULL ,
-    Year-Of-Publication int,
+CREATE TABLE IF NOT EXISTS Books (
+    ISBN varchar(13) PRIMARY KEY, -- note for future. VARCHAR primary keys are VERY innefficient and bad
+    Title varchar(255) NOT NULL ,
+    Author varchar(255) NOT NULL ,
+    YearOfPublication int,
     Publisher varchar(255),
-    Image-URL-S varchar(255),
-    Image-URL-M varchar(255),
-    Image-URL-L varchar(255),
-    PRIMARY KEY (ISBN)
+    ImageSmall varchar(255),
+    ImageMedium varchar(255),
+    ImageLarge varchar(255)
 );
 -- Create for table  users
-CREATE TABLE users(
-    User-ID int NOT NULL,
-    Location varchar(255),
-    Age int,
-    PRIMARY KEY (User-ID)
+CREATE TABLE IF NOT EXISTS Users(
+    ID int PRIMARY KEY,
+    Locale varchar(255),
+    Age int
 );
 -- Create for table  ratings
-CREATE TABLE ratings(
-    User_ID INT NOT NULL,
+CREATE TABLE IF NOT EXISTS Ratings(
+    User INT NOT NULL,
     ISBN VARCHAR(13) NOT NULL,
-    Book_Rating INT NOT NULL CHECK (Book_Rating BETWEEN 0 AND 10),
-    PRIMARY KEY (User_ID, ISBN),
-    FOREIGN KEY (User_ID) REFERENCES users(User_ID),
+    Rating INT NOT NULL CHECK (Rating BETWEEN 0 AND 10),
+    PRIMARY KEY (User, ISBN),
+    FOREIGN KEY (User) REFERENCES users(ID),
     FOREIGN KEY (ISBN) REFERENCES books(ISBN)
 );

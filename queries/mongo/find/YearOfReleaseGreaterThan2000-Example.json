@@ -1,0 +1,8 @@
+{
+    "collection": "Books",
+    "query": {
+        "yearOfRelease":{
+            "$gt":2000
+        }
+    }
+}
