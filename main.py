@@ -5,7 +5,9 @@ Note: __file__ is a variable which stores the
 path of the executed script as a string
 '''
 env = load_env(__file__)
+
 qe = QueryExecutor(env)
+
 
 '''
 At this point you can just run the queries files placed in the

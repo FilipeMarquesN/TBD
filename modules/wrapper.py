@@ -73,7 +73,7 @@ class DatabaseWrapper():
 def getMongoWrapper(environment):
     client = get_client(environment)
     init_collections(client,environment["PATH_SCHEMA_MONGO"])
-
+    
     def is_init():
         result = client["Books"].find().to_list()
         print("find books result" + str(result))
@@ -93,9 +93,7 @@ def getMongoWrapper(environment):
                         to_send = []
                         print("*",end=" ")
                     #except Exception as e:
-                    #    print(f"Couldn't insert batch no#{int(index%500)}:\nReason: {e}")
-
-
+                    #    print(f"Couldn't insert batch no#{int(index%500)}:\nReason: {e}"
                 
             #client[collection]. \
             #insert_many(dataframe.to_dict(orient="records"), ordered=False).inserted_ids()
@@ -106,6 +104,7 @@ def getMongoWrapper(environment):
             
             if(type(query["query"]) == list):
                 start = time()
+
                 client[query["collection"]].insert_many(query["query"]).inserted_ids()
                 end = time() - start
                 return (result, end)

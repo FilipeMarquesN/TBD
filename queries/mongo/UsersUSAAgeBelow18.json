@@ -1,0 +1,11 @@
+{   
+    "collection" : "Users",
+    "query":{
+        "Location": {
+            "$regex": "usa"
+        },  
+        "Age": {
+            "$lte": 18
+        }
+    }
+}
