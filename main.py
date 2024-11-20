@@ -1,24 +1,27 @@
 from modules.envloader import load_env
-from modules.initializer import get_initialized_wrapper as getWrappers
+from modules.query import QueryExecutor
 '''
 Note: __file__ is a variable which stores the
 path of the executed script as a string
 '''
 env = load_env(__file__)
 
+qe = QueryExecutor(env)
 
-Mongo, Mysql = getWrappers(env)
 
 '''
-From here onward evrything should be easy since
-you can jus tdo
-Mongo.insert()
-Mysql.insert()
-Mongo.query() ...
-Mongo.update() ...
-
-TODO: modules that read from the queries and launch
-them on the wrappers
-QOL feat: down the line add some mechanism to prevent
-adding the same data unnecessarily (no inserts if already exists)
+At this point you can just run the queries files placed in the
+queries directory from here
 '''
+a = 0
+while(a != "leave"):
+    a = input("Select an option:\n\t- 'find' : Run all find queries\n\t- 'insert' : Run all insert queries\n\t- 'update' : Run all update queries\n\t- 'leave' : terminate this loop and quit execution\n$")
+    if(a == "find"):
+        qe.execute_find()
+    elif(a == "insert"):
+        qe.execute_insert()
+    elif(a == "update"):
+        qe.execute_update()
+
+
+
