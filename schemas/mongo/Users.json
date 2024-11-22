@@ -1,0 +1,21 @@
+{
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["ID"],
+        "properties": {
+            "ID": {
+                "bsonType": "int",
+                "description": "must be a int and is required"
+            },
+             "Locale": {
+                "bsonType": "string",
+                "description": "must be a string if provided"
+            },
+            "Age": {
+                "bsonType": "int",
+                "minimum": 0,
+                "description": "must be a int if provided"
+            }
+        }
+    }
+}
