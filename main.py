@@ -8,7 +8,7 @@ env = load_env(__file__)
 
 qe = QueryExecutor(env)
 
-
+"""
 '''
 At this point you can just run the queries files placed in the
 queries directory from here
@@ -22,6 +22,6 @@ while(a != "leave"):
         qe.execute_insert()
     elif(a == "update"):
         qe.execute_update()
-
+"""
 
 

@@ -1,37 +1,97 @@
 {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["ISBN", "Title","Author"],
+        "required": ["Id","BookId","Isbn13"],
         "properties": {
-            "ISBN": {
+            "Id": {
                 "bsonType": "string",
-                "description": "must be a int and is required"
+                "description": "must be an string if provided"
+            }, 
+            "BookId": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "BestBook": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "BookTitleId": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "BooksCount": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Isbn": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Isbn13": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Authors": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "PublicationYear": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "OriginalTitle": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
             },
             "Title": {
                 "bsonType": "string",
-                "description": "must be a valid title and is required"
+                "description": "must be an string if provided"
             },
-            "Author": {
-                "bsonType": "string",
-                "description": "must be a stringif provided"
-            },
-            "YearOfPublication": {
-                "bsonType": "int",
-                "description": "must be an int if provided"
-            },
-            "Publisher": {
+            "LanguageCode": {
                 "bsonType": "string",
                 "description": "must be an string if provided"
             },
-            "ImageSmall": {
+            "Rating": {
                 "bsonType": "string",
                 "description": "must be an string if provided"
             },
-            "ImageMedium": {
+            "RatingCount": {
                 "bsonType": "string",
                 "description": "must be an string if provided"
             },
-            "ImageLarge": {
+            "BookTitleRatingCount": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "BookTitleReviewsCount": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Ratings1": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Ratings2": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Ratings3": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Ratings4": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Ratings5": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "ImageURL": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "SmallImageURL": {
                 "bsonType": "string",
                 "description": "must be an string if provided"
             }

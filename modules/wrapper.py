@@ -16,6 +16,7 @@ Utilities for this class
 from json import load
 from time import time
 from sqlalchemy import text
+from modules.querybuilder import build_SQL_insert_queries
 
 '''
 Abstracts away from the concrete database
@@ -72,12 +73,14 @@ class DatabaseWrapper():
 
 def getMongoWrapper(environment):
     client = get_client(environment)
-    init_collections(client,environment["PATH_SCHEMA_MONGO"])
     
     def is_init():
-        result = client["Books"].find().to_list()
-        print("find books result" + str(result))
-        return len(result) != 0
+        result = client["books"].find({"Id": {"$gt":0}}).to_list()
+        coll_check = [coll["name"].upper() for coll in client.list_collections().to_list()]
+        return "BOOKS" in coll_check and len(result) != 0
+
+    if not is_init():
+        init_collections(client,environment["PATH_SCHEMA_MONGO"])
 
     def insert_data(dataset):
         for collection in dataset:
@@ -161,53 +164,35 @@ def getMongoWrapper(environment):
 
 def getMySQLWrapper(environment):
     engine = get_engine(environment)
-    init_tables(engine,environment["PATH_SCHEMA_MYSQL"])
 
     def is_init():
         with engine.connect() as conn:
             try:
-                result = conn.execute(text("SELECT * FROM Users LIMIT 1;")).fetchall()
-                print("Users is empty " + str(result))
+                result = conn.execute(text("SELECT * FROM books LIMIT 1;")).fetchall()
+                print("books is empty " + str(result))
                 return len(result) != 0
             except Exception as e:
                 print(e)
                 return False
+    
+    if not is_init():
+        init_tables(engine,environment["PATH_SCHEMA_MYSQL"])
 
     def insert_data(dataset):
-        books = dataset["Books"]
-        users = dataset["Users"]
-        ratings = dataset["Ratings"]
+        order = ["books","ratings","tags","book_tags","to_read"] #non agnostic to simplify
+        queries =  build_SQL_insert_queries(environment)
         with engine.connect() as conn:
-            for index, row in books.iterrows():
-                if((index + 1)%500 == 0):
-                    print("*",end=" ")
-                try:
-                    conn.execute(text("INSERT INTO Books VALUES(:ISBN,:Title,:Author,:YearOfPublication,:Publisher,:ImageSmall,:ImageMedium,:ImageLarge)"),
-                    row.to_dict())
-                except Exception as e:
-                    print(e)
-
-            for index, row in users.iterrows():
-                if((index + 1)%500 == 0):
-                    print("*",end=" ")
-                try:
-                    conn.execute(text("INSERT INTO Users VALUES(:ID,:Locale,:Age)"), row.to_dict())
-                except Exception as e:
-                    print(e)
-
-            for index, row in ratings.iterrows():
-                if((index + 1)%500 == 0):
-                    print("*",end=" ")
-                try:
-                    conn.execute(text("INSERT INTO Ratings VALUES(:User, :ISBN, :Rating)"), row.to_dict())
-                except Exception as e:
-                    print(e)
+            for dataframe in order:
+                print(f"Inserting data for {dataframe}")
+                stmt = queries[dataframe]
+                for insert_data in dataset[dataframe].to_dict('records') :
+                    conn.execute(text(stmt),insert_data)
 
     def insert(query_file):
         with open(query_file, "r") as query_sql:
             with engine.connect() as conn:   
                 start = time()
-                result = conn.execute(text(query_sql.read()))
+                result = conn.execute(text(query_sql.read())).inserted_primary_key
                 end = time() - start
                 return (result, end)
 
