@@ -38,10 +38,11 @@ CREATE TABLE IF NOT EXISTS ratings(
 );
 
 CREATE TABLE IF NOT EXISTS book_tags(
-    GoodreadsBookId int PRIMARY KEY,
+    GoodreadsBookId int NOT NULL,
     TagId int NOT NULL,
     Count int,
-    FOREIGN KEY (GoodreadsBookId) REFERENCES books(Id),
+    PRIMARY KEY(GoodreadsBookId,TagId),
+    FOREIGN KEY (GoodreadsBookId) REFERENCES books(BookId),
     FOREIGN KEY (TagId) REFERENCES tags(Id)
 );
 

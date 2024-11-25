@@ -1,5 +1,5 @@
 from .wrapper import getWrappers
-from .dataset import to_cleaned_frames
+from .dataset import to_mapped_frames
 
 '''
 Returns Initialized Wrappers
@@ -8,8 +8,8 @@ def get_initialized_wrappers(environment):
     Mongo, Mysql = getWrappers(environment)
 
     if not Mongo.is_init() or not Mysql.is_init() : #If the databases aren't initialized with data
-        print("Databases aren't initialized with any data. Inserting datasets")
-        dataframes = to_cleaned_frames(environment) # Fetch the data from the datasets
+        print("Either one or both databases weren't initialized with any data. Inserting datasets")
+        dataframes = to_mapped_frames(environment) # Fetch the data from the datasets
         if Mongo.is_init():
             print("Mongo was already initialized")
         else:

@@ -1,7 +1,7 @@
 {
     "$jsonSchema": {
         "bsonType": "object",
-        "required": ["Id","BookId","Isbn13"],
+        "required": ["Id","BookId","Isbn"],
         "properties": {
             "Id": {
                 "bsonType": "int",
@@ -28,7 +28,7 @@
                 "description": "must be an string if provided"
             },
             "Isbn13": {
-                "bsonType": "string",
+                "bsonType": "double",
                 "description": "must be an string if provided"
             },
             "Authors": {
@@ -36,8 +36,8 @@
                 "description": "must be an string if provided"
             },
             "PublicationYear": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "double",
+                "description": "Double because dataset set it as double"
             },
             "OriginalTitle": {
                 "bsonType": "string",
@@ -52,7 +52,7 @@
                 "description": "must be an string if provided"
             },
             "Rating": {
-                "bsonType": "int",
+                "bsonType": "double",
                 "description": "must be an int if provided"
             },
             "RatingCount": {
