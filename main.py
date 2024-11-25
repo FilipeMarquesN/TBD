@@ -1,10 +1,18 @@
 from modules.envloader import load_env
 from modules.query import QueryExecutor
+from pathlib import Path
 '''
 Note: __file__ is a variable which stores the
 path of the executed script as a string
 '''
 env = load_env(__file__)
+
+if not Path(env["PATH_DATASET"]).exists():
+    from dataset_utils.clean_dataset import clean
+    print(f"Dataset directory not found."+\
+        "\nThis means datasets weren't properly cleaned")
+    clean()
+    print(f"Successfully cleaned the datasets")
 
 qe = QueryExecutor(env)
 

@@ -21,21 +21,8 @@ Returns a dict of Pandas DataFrames which have it's data cleaned
 Parameters:
 - environment: dict containing environment variables
 """
-def to_cleaned_frames(environment):
+def to_mapped_frames(environment):
     frame_map = to_frames(environment)
-    # change NaN values to python None
-    #for key in frame_map :
-    #    print(f"Replacing {key}'s NaN with None")
-        #frame_map[key] = frame_map[key].where(pd.notnull(frame_map[key]), None)
-    #    frame_map[key].fillna(value=null(),inplace=True)
-    # change NaN values to python None
-    for key in frame_map :
-        print(f"Dropping {key}'s rows with NaN")
-        frame_map[key].dropna(inplace=True)
-    # Drop Duplicates
-    for key in frame_map :
-        print(f"Dropping {key}'s duplicates")
-        frame_map[key].drop_duplicates(inplace=True)
     # apply mappings
     for key in frame_map :
         try:

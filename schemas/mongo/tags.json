@@ -8,8 +8,8 @@
                 "description": "must be an int if provided"
             },
             "TagName": {
-                "bsonType": "int",
-                "description": "must be an int if provided"
+                "bsonType": "string",
+                "description": "must be an string if provided"
             }
         }
     }

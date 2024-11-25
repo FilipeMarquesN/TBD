@@ -68,38 +68,23 @@ class DatabaseWrapper():
     def update(self,query_file):
         return self.ops["update"](query_file)
 
-
-
-
 def getMongoWrapper(environment):
     client = get_client(environment)
-    
+
     def is_init():
-        result = client["books"].find({"Id": {"$gt":0}}).to_list()
-        coll_check = [coll["name"].upper() for coll in client.list_collections().to_list()]
-        return "BOOKS" in coll_check and len(result) != 0
-
-    if not is_init():
-        init_collections(client,environment["PATH_SCHEMA_MONGO"])
-
+        result = client["books"].find({"Id":{"$gt":0}}).to_list()
+        return len(result) != 0
+    
     def insert_data(dataset):
         for collection in dataset:
             print(f"Inserting collection {collection}")
-            print("Inserting in batches of 500 records (avoid Mongo 16MB limitation)")
-            to_send = []
-            for index, row in dataset[collection].iterrows():
-                if index+1 % 500 != 0 :
-                    to_send.append(row.to_dict())
-                else:
-                    #try:
-                        client[collection].insert_many(documents=to_send, ordered=False).inserted_ids()
-                        to_send = []
-                        print("*",end=" ")
-                    #except Exception as e:
-                    #    print(f"Couldn't insert batch no#{int(index%500)}:\nReason: {e}"
-                
-            #client[collection]. \
-            #insert_many(dataframe.to_dict(orient="records"), ordered=False).inserted_ids()
+            print("Inserting in batches of 1000 records (avoid Mongo 16MB limitation)")
+            records = dataset[collection].to_dict(orient="records")
+            inserted = 0
+            while(inserted < len(records)):
+                client[collection]. \
+                    insert_many(records[inserted:(inserted+1000)], ordered=False).inserted_ids
+                inserted = inserted + 1000
 
     def insert(query_file):
         with open(query_file, "r") as query_json:
@@ -108,13 +93,13 @@ def getMongoWrapper(environment):
             if(type(query["query"]) == list):
                 start = time()
 
-                client[query["collection"]].insert_many(query["query"]).inserted_ids()
+                client[query["collection"]].insert_many(query["query"]).inserted_ids
                 end = time() - start
                 return (result, end)
 
             elif(type(query["query"]) == dict):
                 start = time()
-                client[query["collection"]].insert_one(query["query"]).inserted_ids()
+                client[query["collection"]].insert_one(query["query"]).inserted_ids
                 end = time() - start
                 return (result, end)
 
@@ -141,13 +126,13 @@ def getMongoWrapper(environment):
 
             if(type(query["query"]) == list):
                 start = time()
-                client[query["collection"]].update_many(query["query"]).modified_count()
+                client[query["collection"]].update_many(query["query"]).modified_count
                 end = time() - start
                 return (result, end)
 
             elif(type(query["query"]) == dict):
                 start = time()
-                client[query["collection"]].update_one(query["query"]).modified_count()
+                client[query["collection"]].update_one(query["query"]).modified_count
                 end = time() - start
                 return (result, end)
             
@@ -169,14 +154,11 @@ def getMySQLWrapper(environment):
         with engine.connect() as conn:
             try:
                 result = conn.execute(text("SELECT * FROM books LIMIT 1;")).fetchall()
-                print("books is empty " + str(result))
+                #print("books is empty " + str(result))
                 return len(result) != 0
             except Exception as e:
                 print(e)
                 return False
-    
-    if not is_init():
-        init_tables(engine,environment["PATH_SCHEMA_MYSQL"])
 
     def insert_data(dataset):
         order = ["books","ratings","tags","book_tags","to_read"] #non agnostic to simplify
@@ -185,11 +167,13 @@ def getMySQLWrapper(environment):
             for dataframe in order:
                 print(f"Inserting data for {dataframe}")
                 stmt = queries[dataframe]
-                for insert_data in dataset[dataframe].to_dict('records') :
-                    try:
-                        conn.execute(text(stmt),insert_data)
-                    except Exception as e:
-                        print(f"Couldn't insert row {insert_data}.\nReason: {e}")
+                try:
+                    data = dataset[dataframe].to_dict('records')
+                    print(f"Inserting {len(data)} records")
+                    conn.execute(text(stmt),data)
+                except Exception as e:
+                    print(e)
+            conn.commit()
 
     def insert(query_file):
         with open(query_file, "r") as query_sql:
