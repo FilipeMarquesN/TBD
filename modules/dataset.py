@@ -24,12 +24,14 @@ Parameters:
 def to_cleaned_frames(environment):
     frame_map = to_frames(environment)
     # change NaN values to python None
-    """for key in frame_map :
-        print(f"Replacing {key}'s NaN with None")
+    #for key in frame_map :
+    #    print(f"Replacing {key}'s NaN with None")
         #frame_map[key] = frame_map[key].where(pd.notnull(frame_map[key]), None)
-        frame_map[key].fillna(value=null(),inplace=True)"""
-    # Hard coded because nothing else will work properly"
-    frame_map["Users"].fillna(value=-1, inplace=True)
+    #    frame_map[key].fillna(value=null(),inplace=True)
+    # change NaN values to python None
+    for key in frame_map :
+        print(f"Dropping {key}'s rows with NaN")
+        frame_map[key].dropna(inplace=True)
     # Drop Duplicates
     for key in frame_map :
         print(f"Dropping {key}'s duplicates")

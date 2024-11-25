@@ -1,26 +1,53 @@
--- Create for table books
-CREATE TABLE IF NOT EXISTS Books (
-    ISBN varchar(13) PRIMARY KEY, -- note for future. VARCHAR primary keys are VERY innefficient and bad
-    Title varchar(255) NOT NULL ,
-    Author varchar(255) NOT NULL ,
-    YearOfPublication int,
-    Publisher varchar(255),
-    ImageSmall varchar(255),
-    ImageMedium varchar(255),
-    ImageLarge varchar(255)
+CREATE TABLE IF NOT EXISTS books(
+    Id int PRIMARY KEY,
+    BookId int UNIQUE, -- Unique: candidate Key
+    BestBook int UNIQUE, -- Unique: candidate Key
+    BookTitleId int,
+    BooksCount int,
+    Isbn varchar(10), -- Should be unique because candidate key but isn't because of null values
+    Isbn13 varchar(13), -- Should be unique because candidate key but isn't because of null values
+    Authors varchar(1000), -- Line 6202 books.csv
+    PublicationYear int,
+    OriginalTitle varchar(255),
+    Title varchar(255),
+    LanguageCode varchar(20),
+    Rating int,
+    RatingCount int,
+    BookTitleRatingCount int, 
+    BookTitleReviewsCount int,
+    Ratings1 int,
+    Ratings2 int,
+    Ratings3 int,
+    Ratings4 int,
+    Ratings5 int,
+    ImageURL varchar(255),
+    SmallImageURL varchar(255)
 );
--- Create for table  users
-CREATE TABLE IF NOT EXISTS Users(
-    ID int PRIMARY KEY,
-    Locale varchar(255),
-    Age int
+
+CREATE TABLE IF NOT EXISTS tags(
+    Id int PRIMARY KEY,
+    TagName varchar(255)
 );
--- Create for table  ratings
-CREATE TABLE IF NOT EXISTS Ratings(
-    User INT NOT NULL,
-    ISBN VARCHAR(13) NOT NULL,
-    Rating INT NOT NULL CHECK (Rating BETWEEN 0 AND 10),
-    PRIMARY KEY (User, ISBN),
-    FOREIGN KEY (User) REFERENCES users(ID),
-    FOREIGN KEY (ISBN) REFERENCES books(ISBN)
+
+CREATE TABLE IF NOT EXISTS ratings(
+    BookId int NOT NULL,
+    UserId int NOT NULL,
+    Rating int NOT NULL,
+    PRIMARY KEY (UserId, BookId),
+    FOREIGN KEY (BookId) REFERENCES books(Id)
+);
+
+CREATE TABLE IF NOT EXISTS book_tags(
+    GoodreadsBookId int PRIMARY KEY,
+    TagId int NOT NULL,
+    Count int,
+    FOREIGN KEY (GoodreadsBookId) REFERENCES books(Id),
+    FOREIGN KEY (TagId) REFERENCES tags(Id)
+);
+
+CREATE TABLE IF NOT EXISTS to_read (
+    UserId int,
+    BookId int,
+    PRIMARY KEY (UserId, BookId),
+    FOREIGN KEY (BookId) REFERENCES books(Id)
 );

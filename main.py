@@ -8,7 +8,6 @@ env = load_env(__file__)
 
 qe = QueryExecutor(env)
 
-
 '''
 At this point you can just run the queries files placed in the
 queries directory from here

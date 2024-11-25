@@ -1,4 +1,5 @@
 {
-    "User-ID":"User",
-    "Book-Rating":"Rating"
+    "book_id":"BookId",
+    "user_id":"UserId",
+    "rating":"Rating"
 }
