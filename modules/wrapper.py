@@ -159,6 +159,9 @@ def getMySQLWrapper(environment):
             except Exception as e:
                 print(e)
                 return False
+    
+    if not is_init():
+        init_tables(engine,environment["PATH_SCHEMA_MYSQL"])
 
     def insert_data(dataset):
         order = ["books","ratings","tags","book_tags","to_read"] #non agnostic to simplify
