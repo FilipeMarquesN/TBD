@@ -1,0 +1,7 @@
+{
+    "collection": "books",
+    "query": {
+        "LanguageCode": {"$eq": "eng"},  
+        "PublicationYear": {"$gt": 2000}
+    }
+}

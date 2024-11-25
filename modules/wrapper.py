@@ -186,7 +186,10 @@ def getMySQLWrapper(environment):
                 print(f"Inserting data for {dataframe}")
                 stmt = queries[dataframe]
                 for insert_data in dataset[dataframe].to_dict('records') :
-                    conn.execute(text(stmt),insert_data)
+                    try:
+                        conn.execute(text(stmt),insert_data)
+                    except Exception as e:
+                        print(f"Couldn't insert row {insert_data}.\nReason: {e}")
 
     def insert(query_file):
         with open(query_file, "r") as query_sql:

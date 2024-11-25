@@ -1,0 +1,1 @@
+SELECT * FROM books b WHERE b.LanguageCode = 'eng' AND b.PublicationYear > 2000;

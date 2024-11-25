@@ -1,0 +1,20 @@
+{
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["GoodreadsBookId","TagId","Count"],
+        "properties": {
+            "GoodreadsBookId": {
+                "bsonType": "int",
+                "description": "must be an int if provided"
+            },
+            "TagId": {
+                "bsonType": "int",
+                "description": "must be an int if provided"
+            },
+            "Count":{
+                "bsonType": "int",
+                "description": "must be an int if provided"
+            }
+        }
+    }
+}

@@ -4,24 +4,24 @@
         "required": ["Id","BookId","Isbn13"],
         "properties": {
             "Id": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             }, 
             "BookId": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "BestBook": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "BookTitleId": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "BooksCount": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "Isbn": {
                 "bsonType": "string",
@@ -52,40 +52,40 @@
                 "description": "must be an string if provided"
             },
             "Rating": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "RatingCount": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "BookTitleRatingCount": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "BookTitleReviewsCount": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "Ratings1": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "Ratings2": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "Ratings3": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "Ratings4": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "Ratings5": {
-                "bsonType": "string",
-                "description": "must be an string if provided"
+                "bsonType": "int",
+                "description": "must be an int if provided"
             },
             "ImageURL": {
                 "bsonType": "string",
