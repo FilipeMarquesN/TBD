@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS books(
     OriginalTitle varchar(255),
     Title varchar(255),
     LanguageCode varchar(20),
-    Rating int,
+    Rating float(2),
     RatingCount int,
     BookTitleRatingCount int, 
     BookTitleReviewsCount int,
