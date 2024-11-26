@@ -1,0 +1,1 @@
+SELECT * FROM books b WHERE b.Rating <= 4 AND b.OriginalTitle LIKE '%Harry%'

@@ -1,1 +1,0 @@
-SELECT * FROM books b WHERE b.Rating <= 3 AND b.OriginalTitle LIKE '%Harry%'
