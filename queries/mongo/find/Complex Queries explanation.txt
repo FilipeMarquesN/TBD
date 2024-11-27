@@ -1,0 +1,12 @@
+Complex Query 1:
+
+1) Add new book: Nexus - Yuval Noah Harrari
+2) Present the 10 books with the highest rating
+
+Complex Query 2:
+
+1) Add new book: Nexus - Yuval Noah Harrari
+2) Present the authors that have published after 2015,
+sorting by publication year in descending order and presenting how many
+books they have published 
+

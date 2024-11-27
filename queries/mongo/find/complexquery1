@@ -1,0 +1,37 @@
+query1 = [
+  {
+    Id: 10001,
+    BookId: 204929010,
+    BestBook: 204929010,
+    BookTitleId: 204927599,
+    BooksCount: 1,
+    Isbn: 9789897878,
+    Isbn13: 9788535937817,
+    Authors: "Yuval Noah Harari",
+    Year: 2024,
+    OriginalTitle: "Nexus",
+    Title: "Nexus",
+    Language: "eng",
+    Rating: 5.00,
+    RatingCount: 10000,
+    BookTitleRatingCount: 10000,
+    BookTitleReviewsCount: 10000,
+    Ratings1: 0,
+    Ratings2: 0,
+    Ratings3: 0,
+    Ratings4: 500,
+    Ratings5: 1000,
+    ImageURL: "http://example.com/nexus-cover.jpg",
+    SmallImageURL: "http://example.com/small-nexus-cover.jpg"
+  }
+];
+
+query2 =
+[
+  {
+    $sort: {Rating: -1 } 
+  },
+  {
+    $limit: 10
+  }
+];
