@@ -1,7 +1,0 @@
-{
-    "collection": "books",
-    "query": {
-        "Rating": {"$lte": 3},  
-        "OriginalTitle": {"$regex": "^.*Harry.*$"}
-    }
-}
