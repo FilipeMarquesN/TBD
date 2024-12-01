@@ -20,6 +20,7 @@ def clean(dataset):
     write_ignore_list(book_dict)
     target_file = path_of(concat_path(path_of(__file__).parent.parent, path_of("dataset/books.csv")))
     target_file.parent.mkdir(parents=True, exist_ok=True)
+    dataset["original_publication_year"] = dataset["original_publication_year"].astype(int)
     dataset.to_csv(target_file,index=False)
 
 

@@ -76,8 +76,8 @@ class QueryExecutor():
             if query in queries_mysql:
                 results_mongo, time_mongo = self.mongo.update(queries_mongo[query])
                 results_mysql, time_mysql = self.mysql.update(queries_mysql[query])
-                print(f"Mongo: Query(update) {query} : Found {len(results_mongo)} in {time_mongo} seconds")
-                print(f"Mysql: Query(update) {query} : Found {len(results_mysql)} in {time_mysql} seconds")
+                print(f"Mongo: Query(update) {query} : Updated {results_mongo} in {time_mongo} seconds")
+                print(f"Mysql: Query(update) {query} : Updated {results_mysql} in {time_mysql} seconds")
             else:
                 print(f"Warning(update): {query} not found in MySQL Query Directory ")
         for query in queries_mysql:
