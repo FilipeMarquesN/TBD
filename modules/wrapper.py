@@ -17,6 +17,7 @@ from json import load
 from time import time
 from sqlalchemy import text
 from modules.querybuilder import build_SQL_insert_queries
+from copy import deepcopy as copy
 
 '''
 Abstracts away from the concrete database
@@ -125,14 +126,23 @@ def getMongoWrapper(environment):
             query = load(query_json)
 
             if(type(query["query"]) == list):
-                start = time()
-                client[query["collection"]].update_many(query["query"]).modified_count
-                end = time() - start
+                if("$" in list(query["query"][0].keys())[0]):
+                    pipeline = query["query"]
+                    cpipeline = copy(pipeline)
+                    cpipeline.pop(len(cpipeline)-1)
+                    result = len(client[query["collection"]].aggregate(cpipeline).to_list())
+                    start = time()
+                    client[query["collection"]].aggregate(pipeline)
+                    end = time() - start
+                else:
+                    start = time()
+                    result = client[query["collection"]].update_many(query["query"]).modified_count
+                    end = time() - start
                 return (result, end)
 
             elif(type(query["query"]) == dict):
                 start = time()
-                client[query["collection"]].update_one(query["query"]).modified_count
+                result = client[query["collection"]].update_one(query["query"]).modified_count
                 end = time() - start
                 return (result, end)
             
@@ -198,7 +208,8 @@ def getMySQLWrapper(environment):
         with open(query_file, "r") as query_sql:
             with engine.connect() as conn:   
                 start = time()
-                result = conn.execute(text(query_sql.read())) # Visit this in a bit to return everything fetchall() and all that garbage
+                conn.execute(text(query_sql.read())) # Visit this in a bit to return everything fetchall() and all that garbage
+                result = conn.execute(text("SELECT ROW_COUNT();")).fetchone().tuple()[0]
                 end = time() - start
                 return (result, end)
     
@@ -206,9 +217,9 @@ def getMySQLWrapper(environment):
         {
             "init": is_init,
             "insert_dataset": insert_data,
-            "insert": query,
+            "insert": insert,
             "query": query, # through sql alchemy, these methods should functionally do the same
-            "update": query
+            "update": update
         }
     )
 
