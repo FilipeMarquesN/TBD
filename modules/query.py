@@ -56,8 +56,8 @@ class QueryExecutor():
             if query in queries_mysql:
                 results_mongo, time_mongo = self.mongo.insert(queries_mongo[query])
                 results_mysql, time_mysql = self.mysql.insert(queries_mysql[query])
-                print(f"Mongo: Query(insert) {query} : Found {len(results_mongo)} in {time_mongo} seconds")
-                print(f"Mysql: Query(insert) {query} : Found {len(results_mysql)} in {time_mysql} seconds")
+                print(f"Mongo: Query(insert) {query} : Inserted {len(results_mongo)} in {time_mongo} seconds")
+                print(f"Mysql: Query(insert) {query} : Inserted {len(results_mysql)} in {time_mysql} seconds")
             else:
                 print(f"Warning(insert): {query} not found in MySQL Query Directory ")
         for query in queries_mysql:
