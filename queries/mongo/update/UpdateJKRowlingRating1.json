@@ -1,0 +1,34 @@
+{
+    "collection": "books",
+    "query": [{
+        "$match":{
+            "Authors": {"$regex": ".*J\\.K\\. Rowling.*"}
+        }
+    },{
+        "$lookup":{
+            "from":"ratings",
+            "localField":"Id",
+            "foreignField":"BookId",
+            "as":"Rating"
+        }
+    },{
+        "$set":{
+            "Rating.Rating": 3
+        }
+    },{
+        "$unwind": "$Rating"
+    },{
+        "$project": {
+            "_id": "$Rating._id",
+            "BookId": "$Rating.BookId",
+            "UserId": "$Rating.UserId",
+            "Rating": "$Rating.Rating"
+        }
+    },{
+        "$merge": {
+            "into": "ratings",
+            "whenMatched": "merge",
+            "whenNotMatched": "fail"
+        }
+    }]
+}

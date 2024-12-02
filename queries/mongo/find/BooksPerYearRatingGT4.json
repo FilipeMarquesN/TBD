@@ -1,0 +1,32 @@
+{
+    "collection": "ratings",
+    "query": [{
+        "$match":{
+            "Rating": {"$gt": 4}
+        }
+    },{
+        "$lookup":{
+            "from":"books",
+            "localField":"BookId",
+            "foreignField":"Id",
+            "as":"Book"
+        }
+    },{
+        "$unwind": "$Book"
+    },{
+        "$project": {
+            "Title": "$Book.Title",
+            "Rating": "$Rating",
+            "Year": "$Book.PublicationYear"
+        }
+    },{
+        "$group": {
+            "_id": "$Year",
+            "Total_Books": {"$sum": 1}
+        }
+    },{
+        "$sort": {
+            "Year": 1
+        }
+    }]
+}

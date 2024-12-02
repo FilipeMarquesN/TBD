@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS tags(
 CREATE TABLE IF NOT EXISTS ratings(
     BookId int NOT NULL,
     UserId int NOT NULL,
-    Rating int NOT NULL,
+    Rating DECIMAL(2,1) NOT NULL,
     PRIMARY KEY (UserId, BookId),
     FOREIGN KEY (BookId) REFERENCES books(Id)
 );

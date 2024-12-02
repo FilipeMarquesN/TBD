@@ -1,0 +1,1 @@
+CREATE INDEX books_ratings ON books (Id,Rating);

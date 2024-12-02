@@ -1,0 +1,8 @@
+{
+    "collection": "books",
+    "index": {
+        "_id": 1,
+        "Id": 1,
+        "Rating": -1
+    }
+}
