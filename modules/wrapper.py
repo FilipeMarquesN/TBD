@@ -18,6 +18,7 @@ from time import time
 from sqlalchemy import text
 from modules.querybuilder import build_SQL_insert_queries
 from copy import deepcopy as copy
+from pathlib import Path as path_of
 
 '''
 Abstracts away from the concrete database
@@ -68,6 +69,13 @@ class DatabaseWrapper():
     '''
     def update(self,query_file):
         return self.ops["update"](query_file)
+
+    '''
+    Executes the index queries defined in the external folder
+    '''
+    def index(self):
+        self.ops["index"]()
+
 
 def getMongoWrapper(environment):
     client = get_client(environment)
@@ -145,6 +153,18 @@ def getMongoWrapper(environment):
                 result = client[query["collection"]].update_one(query["query"]).modified_count
                 end = time() - start
                 return (result, end)
+
+    def index():
+        index_path = path_of(environment["PATH_INDEX_MONGO"])
+        indexes = [f for f in index_path.iterdir() if f.name[-5:] == ".json"]
+        for index_file in indexes:
+            print(f"Mongo: Applying index {index_file.name}")
+            with open(str(index_file), "r") as query_json:
+                query = load(query_json)
+                coll = query["collection"]
+                index = query["index"] # should be a dict/JSON object
+                client[coll].create_index([(key,index[key]) for key in index]) # packs everything
+
             
     return DatabaseWrapper(
         {
@@ -152,7 +172,8 @@ def getMongoWrapper(environment):
             "insert_dataset": insert_data ,
             "insert": insert,
             "query": query,
-            "update": update
+            "update": update,
+            "index": index
         }
     )
 
@@ -212,6 +233,15 @@ def getMySQLWrapper(environment):
                 result = conn.execute(text("SELECT ROW_COUNT();")).fetchone().tuple()[0]
                 end = time() - start
                 return (result, end)
+
+    def index():
+        with engine.connect() as conn:
+            index_path = path_of(environment["PATH_INDEX_MYSQL"])
+            indexes = [f for f in index_path.iterdir() if f.name[-4:] == ".sql"]
+            for index_file in indexes:
+                print(f"MySQL: Applying index {index_file.name}")
+                with open(str(index_file), "r") as query_sql:
+                    result = conn.execute(text(query_sql.read()))
     
     return DatabaseWrapper(
         {
@@ -219,7 +249,8 @@ def getMySQLWrapper(environment):
             "insert_dataset": insert_data,
             "insert": insert,
             "query": query, # through sql alchemy, these methods should functionally do the same
-            "update": update
+            "update": update,
+            "index": index
         }
     )
 

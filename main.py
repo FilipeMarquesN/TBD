@@ -22,13 +22,17 @@ queries directory from here
 '''
 a = 0
 while(a != "leave"):
-    a = input("Select an option:\n\t- 'find' : Run all find queries\n\t- 'insert' : Run all insert queries\n\t- 'update' : Run all update queries\n\t- 'leave' : terminate this loop and quit execution\n$")
+    a = input("Select an option:\n\t- 'find' : Run all find queries\n\t- 'insert' : Run all insert queries\n\t- 'update' : Run all update queries\n\t- 'index' : Apply Indexes to both databases\n\t- 'all' : Performs a full execution: runs every single option above(Repeats runs after index)\n\t- 'leave' : terminate this loop and quit execution\n$")
     if(a == "find"):
         qe.execute_find()
     elif(a == "insert"):
         qe.execute_insert()
     elif(a == "update"):
         qe.execute_update()
+    elif(a == "index"):
+        qe.execute_indexes()
+    elif(a == "all"):
+        qe.index_test()
 
 
 
