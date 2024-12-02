@@ -91,3 +91,18 @@ class QueryExecutor():
             # execute pairs, throw warnings when theres not respective pair
             if query not in queries_mongo: # Every matched query ran in first loop. This loop reports queries that exist in mysql but dont exist for mongo
                 print(f"Warning(update): {query} not found in Mongo Query Directory ")
+
+    def execute_indexes(self):
+        self.mongo.index()
+        print("Applied Mongo indexes")
+        self.mysql.index()
+        print("Applied MySQL indexes")
+
+    def index_test(self):
+        self.execute_find()
+        self.execute_insert()
+        self.execute_update()
+        self.execute_indexes()
+        self.execute_find()
+        self.execute_insert()
+        self.execute_update()
