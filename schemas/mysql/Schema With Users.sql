@@ -26,6 +26,8 @@ CREATE TABLE IF NOT EXISTS books(
 
 CREATE TABLE IF NOT EXISTS users (
     UserId int,
+    Name varchar(255),
+    Surname varchar(255),
     PRIMARY KEY(UserId)
 );
 
