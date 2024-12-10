@@ -6,7 +6,15 @@
             "UserId": {
                 "bsonType": "int",
                 "description": "must be an int and is required"
+            },
+            "Name": {
+                "bsonType": "string",
+                "description": "must be an string if provided"
+            },
+            "Surname":{
+                "bsonType": "string",
+                "description": "must be an string if provided"
             }
         }
+        }
     }
-}
