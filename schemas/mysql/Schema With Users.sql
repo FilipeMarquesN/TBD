@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS ratings(
     Rating DECIMAL(2,1) NOT NULL,
     PRIMARY KEY (UserId, BookId),
     FOREIGN KEY (BookId) REFERENCES books(Id),
-    FOREIGH KEY (UserId) REFERENCES users(UserId)
+    FOREIGN KEY (UserId) REFERENCES users(UserId)
 );
 
 CREATE TABLE IF NOT EXISTS book_tags(
@@ -59,6 +59,6 @@ CREATE TABLE IF NOT EXISTS to_read (
     BookId int,
     PRIMARY KEY (UserId, BookId),
     FOREIGN KEY (BookId) REFERENCES books(Id),
-    FOREIGH KEY (UserId) REFERENCES users(UserId)
+    FOREIGN KEY (UserId) REFERENCES users(UserId)
 );
 
