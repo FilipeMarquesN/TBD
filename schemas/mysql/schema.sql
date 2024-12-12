@@ -24,6 +24,13 @@ CREATE TABLE IF NOT EXISTS books(
     SmallImageURL varchar(255)
 );
 
+CREATE TABLE IF NOT EXISTS users (
+    UserId int,
+    UserName varchar(255),
+    UserSurname varchar(255),
+    PRIMARY KEY(UserId)
+);
+
 CREATE TABLE IF NOT EXISTS tags(
     Id int PRIMARY KEY,
     TagName varchar(255)
@@ -34,7 +41,8 @@ CREATE TABLE IF NOT EXISTS ratings(
     UserId int NOT NULL,
     Rating DECIMAL(2,1) NOT NULL,
     PRIMARY KEY (UserId, BookId),
-    FOREIGN KEY (BookId) REFERENCES books(Id)
+    FOREIGN KEY (BookId) REFERENCES books(Id),
+    FOREIGN KEY (UserId) REFERENCES users(UserId)
 );
 
 CREATE TABLE IF NOT EXISTS book_tags(
@@ -50,5 +58,7 @@ CREATE TABLE IF NOT EXISTS to_read (
     UserId int,
     BookId int,
     PRIMARY KEY (UserId, BookId),
-    FOREIGN KEY (BookId) REFERENCES books(Id)
+    FOREIGN KEY (BookId) REFERENCES books(Id),
+    FOREIGN KEY (UserId) REFERENCES users(UserId)
 );
+
