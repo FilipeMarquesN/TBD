@@ -7,11 +7,11 @@
                 "bsonType": "int",
                 "description": "must be an int and is required"
             },
-            "Name": {
+            "UserName": {
                 "bsonType": "string",
                 "description": "must be an string if provided"
             },
-            "Surname":{
+            "UserSurname":{
                 "bsonType": "string",
                 "description": "must be an string if provided"
             }
