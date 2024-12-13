@@ -5,7 +5,7 @@
         "properties": {
             "Id": {
                 "bsonType": "int",
-                "description": "must be an int if provided"
+                "description": "must be an int and is required"
             }, 
             "BookId": {
                 "bsonType": "int",

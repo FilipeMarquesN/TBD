@@ -5,15 +5,15 @@
         "properties": {
             "GoodreadsBookId": {
                 "bsonType": "int",
-                "description": "must be an int if provided"
+                "description": "must be an int and is required"
             },
             "TagId": {
                 "bsonType": "int",
-                "description": "must be an int if provided"
+                "description": "must be an int and is required"
             },
             "Count":{
                 "bsonType": "int",
-                "description": "must be an int if provided"
+                "description": "must be an int and is required"
             }
         }
     }
