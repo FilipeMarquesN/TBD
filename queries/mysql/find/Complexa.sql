@@ -1,54 +1,39 @@
-WITH MaiorFa AS (
-    SELECT 
-        u.UserId, 
-        b.id AS BookId, 
-        COUNT(r.UserId) AS amount
-    FROM users u
-    JOIN ratings r ON u.UserId = r.UserId
-    JOIN books b ON r.BookId = b.id
-    WHERE b.id IN (
-        SELECT BookId
-        FROM books
-        WHERE Title LIKE '%Harry Potter%'
-    )
-    GROUP BY u.UserId, b.id
-    ORDER BY amount DESC
-)
-SELECT *
-FROM MaiorFa
-LIMIT 1;
-
-INSERT INTO books (
-    id, book_id, best_book_id, work_id, books_count, isbn, isbn13, authors, 
-    original_publication_year, original_title, title, language_code, 
-    average_rating, ratings_count, work_ratings_count, work_text_reviews_count, 
-    ratings_1, ratings_2, ratings_3, ratings_4, ratings_5, image_url, small_image_url
+INSERT INTO books (Id,BookId,BestBook,BookTitleId, BooksCount, Isbn, Isbn13, Authors, PublicationYear, OriginalTitle, Title, LanguageCode, Rating, 
+    RatingCount, BookTitleRatingCount, BookTitleReviewsCount, Ratings1, Ratings2, Ratings3, Ratings4, Ratings5, ImageURL, SmallImageURL
 )
 SELECT 
-    999999 AS id,                      
-    999999 AS book_id,                 
-    999999 AS best_book_id,            
-    999999 AS work_id,                 
-    100 AS books_count,                
-    '999999' AS isbn,                  
-    '9999999999999' AS isbn13,         
-    mf.UserId AS authors,             
-    2024 AS original_publication_year, 
-    'Harry Potter Fan Book' AS original_title, 
-    'Harry Potter Fan Book' AS title,          
-    'eng' AS language_code,            
-    0 AS average_rating,               
-    0 AS ratings_count,                
-    0 AS work_ratings_count,           
-    0 AS work_text_reviews_count,      
-    0 AS ratings_1,                    
-    0 AS ratings_2,                    
-    0 AS ratings_3,                    
-    0 AS ratings_4,                    
-    0 AS ratings_5,                    
-    'None' AS image_url,               
-    'None' AS small_image_url          
+    999999 AS Id,                       
+    999999 AS BookId,                   
+    999999 AS BestBook,                 
+    999999 AS BookTitleId,              
+    100 AS BooksCount,                  
+    '999999' AS Isbn,                   
+    '9999999999999' AS Isbn13,          
+    mf.UserId AS Authors,               
+    2024 AS PublicationYear,            
+    'Harry Potter Fan Book' AS OriginalTitle, 
+    'Harry Potter Fan Book' AS Title,          
+    'eng' AS LanguageCode,              
+    0 AS Rating,                        
+    0 AS RatingCount,                   
+    0 AS BookTitleRatingCount,          
+    0 AS BookTitleReviewsCount,         
+    0 AS Ratings1,                      
+    0 AS Ratings2,                      
+    0 AS Ratings3,                      
+    0 AS Ratings4,                      
+    0 AS Ratings5,                      
+    'None' AS ImageURL,                 
+    'None' AS SmallImageURL             
 FROM 
-    MaiorFa mf;
-WHERE 
-    RowNum = 1;
+    (SELECT 
+    u.UserId, 
+    COUNT(r.UserId) AS amount  -- Total count of ratings for all Harry Potter books by the user
+FROM users u
+JOIN ratings r ON u.UserId = r.UserId
+JOIN books b ON r.BookId = b.id
+WHERE b.Title LIKE '%Harry Potter%'  -- Only books with "Harry Potter" in the title
+GROUP BY u.UserId  -- Group by user only, not by book
+ORDER BY amount DESC
+LIMIT 1
+) AS mf;
