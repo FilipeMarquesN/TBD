@@ -62,3 +62,10 @@ CREATE TABLE IF NOT EXISTS to_read (
     FOREIGN KEY (UserId) REFERENCES users(UserId)
 );
 
+CREATE TABLE IF NOT EXISTS authorStatus (
+    Authors VARCHAR(255),
+    TotalBooks INT,
+    AvgRating DECIMAL(3, 2),
+    YearWithMostBooks INT,
+    BooksInYearWithMost INT
+);
