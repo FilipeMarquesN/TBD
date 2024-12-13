@@ -28,12 +28,12 @@ SELECT
 FROM 
     (SELECT 
     u.UserId, 
-    COUNT(r.UserId) AS amount  -- Total count of ratings for all Harry Potter books by the user
+    COUNT(r.UserId) AS amount  -
 FROM users u
 JOIN ratings r ON u.UserId = r.UserId
 JOIN books b ON r.BookId = b.id
-WHERE b.Title LIKE '%Harry Potter%'  -- Only books with "Harry Potter" in the title
-GROUP BY u.UserId  -- Group by user only, not by book
+WHERE b.Title LIKE '%Harry Potter%' 
+GROUP BY u.UserId  
 ORDER BY amount DESC
 LIMIT 1
 ) AS mf;
