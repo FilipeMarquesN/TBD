@@ -1,4 +1,4 @@
-INSERT INTO books (Id,BookId,BestBook,BookTitleId, BooksCount, Isbn, Isbn13, Authors, PublicationYear, OriginalTitle, Title, LanguageCode, Rating, 
+INSERT INTO books (Id, BookId, BestBook, BookTitleId, BooksCount, Isbn, Isbn13, Authors, PublicationYear, OriginalTitle, Title, LanguageCode, Rating, 
     RatingCount, BookTitleRatingCount, BookTitleReviewsCount, Ratings1, Ratings2, Ratings3, Ratings4, Ratings5, ImageURL, SmallImageURL
 )
 SELECT 
@@ -9,7 +9,7 @@ SELECT
     100 AS BooksCount,                  
     '999999' AS Isbn,                   
     '9999999999999' AS Isbn13,          
-    mf.UserId AS Authors,               
+    CONCAT(mf.UserName, ' ', mf.UserSurname) AS Authors, 
     2024 AS PublicationYear,            
     'Harry Potter Fan Book' AS OriginalTitle, 
     'Harry Potter Fan Book' AS Title,          
@@ -27,13 +27,15 @@ SELECT
     'None' AS SmallImageURL             
 FROM 
     (SELECT 
-    u.UserId, 
-    COUNT(r.UserId) AS amount  -
-FROM users u
-JOIN ratings r ON u.UserId = r.UserId
-JOIN books b ON r.BookId = b.id
-WHERE b.Title LIKE '%Harry Potter%' 
-GROUP BY u.UserId  
-ORDER BY amount DESC
-LIMIT 1
-) AS mf;
+        u.UserId, 
+        u.UserName,
+        u.UserSurname,
+        COUNT(r.UserId) AS amount
+     FROM users u
+     JOIN ratings r ON u.UserId = r.UserId
+     JOIN books b ON r.BookId = b.id
+     WHERE b.Title LIKE '%Harry Potter%'
+     GROUP BY u.UserId, u.UserName, u.UserSurname
+     ORDER BY amount DESC
+     LIMIT 1
+    ) AS mf;
