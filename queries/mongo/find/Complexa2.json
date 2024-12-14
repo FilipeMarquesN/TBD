@@ -42,16 +42,6 @@
     }
   },
   {
-    "$project": {
-      "Id": "$_id",
-      "TotalBooks": 1,
-      "AvgRating": 1,
-      "YearWithMostBooks": 1,
-      "BooksInYearWithMost": 1,
-      "_id": 0
-    }
-  },
-  {
     "$sort": { "AvgRating": -1 }
   },
   {
