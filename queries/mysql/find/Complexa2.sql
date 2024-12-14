@@ -2,7 +2,7 @@ INSERT INTO authorStatus(Authors, TotalBooks, AvgRating, YearWithMostBooks, Book
 SELECT 
     b.Authors,
     COUNT(*) AS TotalBooks,
-    AVG(b.Rating) AS AvgRating,
+    AVG(r.Rating) AS AvgRating, 
     (SELECT PublicationYear
      FROM books b2
      WHERE b2.Authors = b.Authors
@@ -22,6 +22,7 @@ SELECT
              )
     ) AS BooksInYearWithMost
 FROM books b
+JOIN ratings r ON b.Id = r.BookId  
 GROUP BY b.Authors
 ORDER BY AvgRating DESC
 LIMIT 10;
