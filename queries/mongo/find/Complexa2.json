@@ -1,0 +1,60 @@
+[
+  {
+    "$lookup": {
+      "from": "ratings",
+      "localField": "Id",
+      "foreignField": "BookId",
+      "as": "bookRatings"
+    }
+  },
+  {
+    "$unwind": "$bookRatings"
+  },
+  {
+    "$group": {
+      "_id": "$Authors",
+      "TotalBooks": { "$sum": 1 },
+      "AvgRating": { "$avg": "$bookRatings.Rating" },
+      "YearCounts": { "$push": { "year": "$PublicationYear", "count": 1 } }
+    }
+  },
+  {
+    "$unwind": "$YearCounts"
+  },
+  {
+    "$group": {
+      "_id": { "Authors": "$_id", "year": "$YearCounts.year" },
+      "YearlyBookCount": { "$sum": "$YearCounts.count" },
+      "TotalBooks": { "$first": "$TotalBooks" },
+      "AvgRating": { "$first": "$AvgRating" }
+    }
+  },
+  {
+    "$sort": { "_id.Authors": 1, "YearlyBookCount": -1 }
+  },
+  {
+    "$group": {
+      "_id": "$_id.Authors",
+      "TotalBooks": { "$first": "$TotalBooks" },
+      "AvgRating": { "$first": "$AvgRating" },
+      "YearWithMostBooks": { "$first": "$_id.year" },
+      "BooksInYearWithMost": { "$first": "$YearlyBookCount" }
+    }
+  },
+  {
+    "$project": {
+      "Id": "$_id",
+      "TotalBooks": 1,
+      "AvgRating": 1,
+      "YearWithMostBooks": 1,
+      "BooksInYearWithMost": 1,
+      "_id": 0
+    }
+  },
+  {
+    "$sort": { "AvgRating": -1 }
+  },
+  {
+    "$limit": 10
+  }
+]
