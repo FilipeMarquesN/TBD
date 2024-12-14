@@ -1,0 +1,7 @@
+{
+ "collection": "books_Id",
+  "index": {
+        "_id": 1
+    }
+
+}

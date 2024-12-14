@@ -1,0 +1,7 @@
+{
+ "collection": "booksAuthors",
+  "index": {
+        "Author": 1
+    }
+
+}
