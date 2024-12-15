@@ -1,0 +1,16 @@
+{
+    "$jsonSchema": {
+        "bsonType": "object",
+        "required": ["Id","TagName"],
+        "properties": {
+            "Id": {
+                "bsonType": "int",
+                "description": "must be an int and is required"
+            },
+            "TagName": {
+                "bsonType": "string",
+                "description": "must be an string and is required"
+            }
+        }
+    }
+}
