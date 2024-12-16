@@ -1,0 +1,25 @@
+{
+    "collection": "books",
+    "query": [{
+        "$unwind": "$UserRatings"
+    },{
+        "$match":{
+            "UserRatings.Rating": {"$gt": 4}
+        }
+    },{
+        "$project": {
+            "Title": "$Title",
+            "Rating": "$UserRatings.Rating",
+            "Year": "$PublicationYear"
+        }
+    },{
+        "$group": {
+            "_id": "$Year",
+            "Total_Books": {"$sum": 1}
+        }
+    },{
+        "$sort": {
+            "Year": 1
+        }
+    }]
+}

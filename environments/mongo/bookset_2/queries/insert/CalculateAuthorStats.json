@@ -1,0 +1,50 @@
+{
+  "collection": "books",
+  "query":[
+  {
+      "$unwind": "$UserRatings"
+  },
+  {
+    "$group": {
+      "_id": "$Authors",
+      "TotalBooks": { "$sum": 1 },
+      "AvgRating": { "$avg": "$UserRatings.Rating" },
+      "YearCounts": { "$push": { "year": "$PublicationYear", "count": 1 } }
+    }
+  },
+  {
+    "$unwind": "$YearCounts"
+  },
+  {
+    "$group": {
+      "_id": { "Authors": "$_id", "year": "$YearCounts.year" },
+      "YearlyBookCount": { "$sum": "$YearCounts.count" },
+      "TotalBooks": { "$first": "$TotalBooks" },
+      "AvgRating": { "$first": "$AvgRating" }
+    }
+  },
+  {
+    "$sort": { "_id.Authors": 1, "YearlyBookCount": -1 }
+  },
+  {
+    "$group": {
+      "_id": "$_id.Authors",
+      "TotalBooks": { "$first": "$TotalBooks" },
+      "AvgRating": { "$first": "$AvgRating" },
+      "YearWithMostBooks": { "$first": "$_id.year" },
+      "BooksInYearWithMost": { "$first": "$YearlyBookCount" }
+    }
+  },
+  {
+    "$sort": { "AvgRating": -1 }
+  },
+  {
+    "$limit": 10
+  },
+{
+  "$merge": {
+            "into": "author_stats"
+        }
+  }
+]
+}

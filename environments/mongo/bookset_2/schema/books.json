@@ -28,7 +28,7 @@
                 "description": "must be an string if provided"
             },
             "Isbn13": {
-                "bsonType": "double",
+                "bsonType": "string",
                 "description": "must be an string if provided"
             },
             "Authors": {
@@ -94,6 +94,14 @@
             "SmallImageURL": {
                 "bsonType": "string",
                 "description": "must be an string if provided"
+            },
+            "Tags" : {
+               "bsonType": "array",
+               "description": "array of strings" 
+            },
+            "UserRatings": {
+                "bsonType": "array",
+                "description": "array of ratings"
             }
         }
     }

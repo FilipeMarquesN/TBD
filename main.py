@@ -1,38 +1,33 @@
 from modules.envloader import load_env
-from modules.query import QueryExecutor
-from pathlib import Path
+from modules.project import getBookset1 as entrega1, getBookset2 as entrega2
 '''
 Note: __file__ is a variable which stores the
 path of the executed script as a string
 '''
 env = load_env(__file__)
 
-if not Path(env["PATH_DATASET"]).exists():
-    from dataset_utils.clean_dataset import clean
-    print(f"Dataset directory not found."+\
-        "\nThis means datasets weren't properly cleaned")
-    clean()
-    print(f"Successfully cleaned the datasets")
+#executors = entrega1(env)
 
-qe = QueryExecutor(env)
+print("\n\n First Run: Delivery 1\n\n")
 
-'''
-At this point you can just run the queries files placed in the
-queries directory from here
-'''
-a = 0
-while(a != "leave"):
-    a = input("Select an option:\n\t- 'find' : Run all find queries\n\t- 'insert' : Run all insert queries\n\t- 'update' : Run all update queries\n\t- 'index' : Apply Indexes to both databases\n\t- 'all' : Performs a full execution: runs every single option above(Repeats runs after index)\n\t- 'leave' : terminate this loop and quit execution\n$")
-    if(a == "find"):
-        qe.execute_find()
-    elif(a == "insert"):
-        qe.execute_insert()
-    elif(a == "update"):
-        qe.execute_update()
-    elif(a == "index"):
-        qe.execute_indexes()
-    elif(a == "all"):
-        qe.index_test()
+#executors["mongo"].run_queries()
+#executors["mysql"].run_queries()
+
+executors = entrega2(env)
+
+print("\n\n First Run: Delivery 2 (No Index)\n\n")
+
+#executors["mongo"].run_queries()
+#executors["mysql"].run_queries()
+#executors["mongo"].reset()
+#executors["mysql"].reset()
+
+print("\n\n Second Run: Delivery 2 (Indexes)\n\n")
+
+#executors["mongo"].index_run()
+executors["mysql"].index_run()
+
+
 
 
 

@@ -1,0 +1,1 @@
+SELECT COUNT(Id), AVG(PublicationYear), Authors FROM books b GROUP BY b.Authors;

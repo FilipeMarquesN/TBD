@@ -23,7 +23,7 @@ services:
       - ./docker_volumes/mysql:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_USER: BDA26
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
 
   # Mongo Express Service

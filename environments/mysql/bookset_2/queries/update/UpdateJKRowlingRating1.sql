@@ -1,0 +1,1 @@
+UPDATE ratings JOIN books ON books.Id = ratings.BookId SET ratings.Rating = 1 WHERE books.Authors LIKE "%J.K. Rowling%";

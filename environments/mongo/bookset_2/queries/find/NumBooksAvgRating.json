@@ -1,0 +1,16 @@
+{
+    "collection": "books",
+    "query": [
+        {
+            "$group": {
+                "_id": "$Authors",  
+                "Book_count": {"$sum": 1},
+                "avg_PublicationYear": {"$avg": "$PublicationYear"}  
+                
+            }
+        },
+        {
+            "$sort": {"avg_PublicationYear": 1}  
+        }
+    ]
+}

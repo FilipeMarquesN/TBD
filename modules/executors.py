@@ -1,4 +1,4 @@
-from drivers import MongoDatabaseWrapper as mongo, MySQLDatabaseWrapper as mysql, mongo_mysql_insert as generate_schema
+from .drivers import MongoDatabaseWrapper as mongo, MySQLDatabaseWrapper as mysql, mongo_mysql_insert as generate_schema
 from pathlib import Path as path_of
 from json import load
 
@@ -27,17 +27,15 @@ class MongoExecutor():
                     schema = load(schema_f)
                     self.client.schema(collection, schema)
 
-    def __init_data__(self):
-        raise NotImplementedError
-
-    def __init__(self, environment, database_name):
+    def __init__(self, environment, database_name, dataset):
         self.database_name = database_name
         self.client = mongo(environment, self.database_name)
-        self.query_path = path_of(environment["__WORK_DIR__"],f"mongo/{database_name}/queries")
-        self.schema_path = path_of(environment["__WORK_DIR__"],f"mongo/{database_name}/schema")
-        self.map_path = path_of(environment["__WORK_DIR__"],f"mongo/{database_name}/mappings")
-        self.index_path = path_of(environment["__WORK_DIR__"],f"mongo/indexes")
-        __init_schema__()
+        self.query_path = path_of(environment["__WORK_DIR__"],f"environments/mongo/{database_name}/queries")
+        self.schema_path = path_of(environment["__WORK_DIR__"],f"environments/mongo/{database_name}/schema")
+        self.map_path = path_of(environment["__WORK_DIR__"],"mappings")
+        self.index_path = path_of(environment["__WORK_DIR__"],f"indexes/mongo")
+        self.__init_schema__()
+        self.client.insert_dataset(dataset)
         
 
     '''
@@ -62,7 +60,7 @@ class MongoExecutor():
                         elif query_type == "find" :
                             results, time = self.client.find(collection, query)
                             print(f"Mongo: Found {len(results)} rows in {time} seconds")
-                            print(f"Mongo: Records:\n{"\n".join([",".join(row) for row in results])}\n")
+                            print(f"Mongo: Records:\n{"\n".join(shortenOutput([",".join([str(row)]) for row in results]))}\n")
                         elif query_type == "update":
                             num_rows, time = self.client.update(collection, query)
                             print(f"Mongo: Updated {num_rows} in {time} seconds\n")
@@ -96,8 +94,6 @@ class MongoExecutor():
         self.run_queries()
         self.reset()
 
-
-
 class MySQLExecutor():
 
     def __init_schema__(self):
@@ -106,17 +102,15 @@ class MySQLExecutor():
                 with open(str(schema_file), "r") as schema_f:
                     self.client.schema(schema_f.read())
 
-    def __data__(self):
-        raise NotImplementedError
-
-    def __init___(self, environment, database_name):
+    def __init__(self, environment, database_name, dataset):
         self.database_name = database_name
         self.client = mysql(environment, self.database_name)
-        self.query_path = path_of(environment["__WORK_DIR__"],f"mysql/{database_name}/queries")
-        self.schema_path = path_of(environment["__WORK_DIR__"],f"mysql/{database_name}/schema")
-        self.map_path = path_of(environment["__WORK_DIR__"],f"mysql/{database_name}/mappings")
-        self.index_path = path_of(environment["__WORK_DIR__"],f"mysql/indexes")
-        __init_schema__()
+        self.query_path = path_of(environment["__WORK_DIR__"],f"environments/mysql/{database_name}/queries")
+        self.schema_path = path_of(environment["__WORK_DIR__"],f"environments/mysql/{database_name}/schema")
+        self.map_path = path_of(environment["__WORK_DIR__"],"mappings") # necessary bcz we use mappings to build the insert queries
+        self.index_path = path_of(environment["__WORK_DIR__"],f"indexes/mysql")
+        self.__init_schema__()
+        self.client.insert_dataset(dataset, self.__build_SQL_queries__())
 
     def __build_SQL_queries__(self):
         mappings = [f for f in self.map_path.iterdir() if f.name[-5:] == '.json']
@@ -152,7 +146,7 @@ class MySQLExecutor():
                         elif query_type == "find" :
                             results, time = self.client.find(query)
                             print(f"MySQL: Found {len(results)} rows in {time} seconds")
-                            print(f"MySQL: Records:\n{"\n".join([",".join(row) for row in results])}\n")
+                            print(f"MySQL: Records:\n{"\n".join(shortenOutput([",".join([str(row)]) for row in results]))}\n")
                         elif query_type == "update":
                             num_rows, time = self.client.update(query)
                             print(f"MySQL: Updated {num_rows} in {time} seconds\n")
@@ -181,3 +175,7 @@ class MySQLExecutor():
                 self.client.index(index)
         self.run_queries()
         self.reset()
+
+    '''Creates schema for MongoOptimization: Use only on bookset_2'''
+    def produce_mongo_dataset(self):
+        return generate_schema(self.client)
