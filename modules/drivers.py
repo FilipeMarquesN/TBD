@@ -66,7 +66,7 @@ class MongoDatabaseWrapper():
 
         elif(type(query) == dict):
             start = time()
-            result = self.db[collection].insert_one(query).inserted_ids
+            result = self.db[collection].insert_one(query).inserted_id
             end = time() - start
             return (result, end)
 

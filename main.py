@@ -6,25 +6,25 @@ path of the executed script as a string
 '''
 env = load_env(__file__)
 
-#executors = entrega1(env)
+executors = entrega1(env)
 
 print("\n\n First Run: Delivery 1\n\n")
 
-#executors["mongo"].run_queries()
-#executors["mysql"].run_queries()
+executors["mongo"].run_queries()
+executors["mysql"].run_queries()
 
 executors = entrega2(env)
 
 print("\n\n First Run: Delivery 2 (No Index)\n\n")
 
-#executors["mongo"].run_queries()
-#executors["mysql"].run_queries()
-#executors["mongo"].reset()
-#executors["mysql"].reset()
+executors["mongo"].run_queries()
+executors["mysql"].run_queries()
+executors["mongo"].reset()
+executors["mysql"].reset()
 
 print("\n\n Second Run: Delivery 2 (Indexes)\n\n")
 
-#executors["mongo"].index_run()
+executors["mongo"].index_run()
 executors["mysql"].index_run()
 
 
